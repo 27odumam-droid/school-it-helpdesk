@@ -86,6 +86,8 @@ the schema, API, and acceptance criteria.
   implementation evidence, review decisions, and commit hashes.
 - [docs/manual-test-matrix.md](docs/manual-test-matrix.md) records observed
   manual UI checks and their results.
+- [docs/demo-walkthrough.md](docs/demo-walkthrough.md) walks through creating,
+  resolving, filtering, and verifying a ticket after restart.
 - [docs/gates.md](docs/gates.md) defines Gates A, B, and C.
 - [docs/code-defense-guide.md](docs/code-defense-guide.md) prepares the
   student for the required live explanation and coding exercise.

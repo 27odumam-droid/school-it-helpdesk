@@ -115,6 +115,13 @@ Flask restart, the details page and filtered dashboard retained resolved
 status, assignment, notes, and timestamp. See
 [`manual-test-matrix.md`](manual-test-matrix.md).
 
+**Live walkthrough:** On 2026-11-09, created ticket
+`2ae99622-4777-48ae-9a13-dd08810d1978` in the shared browser, found it by room,
+assigned Jamie Chen, advanced it through `In Progress` to `Resolved`, saved
+resolution notes, filtered the dashboard, restarted Flask, and verified the
+same ticket and resolution metadata persisted. The reproducible steps and
+actual values are in [`demo-walkthrough.md`](demo-walkthrough.md).
+
 **Product Owner QA:** Pending; implementation-agent browser results are not
 Product Owner sign-off.
 **Student live defense:** Not performed.
