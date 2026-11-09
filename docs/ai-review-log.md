@@ -1,81 +1,75 @@
 # AI Review Log
 
-This log records phase scope, review decisions, implementation evidence, and
-Product Owner QA. An AI statement that a feature works is not evidence; record
-commands, observed results, and manual checks.
+Record phase approvals, decisions, errors, corrections, exact test commands
+and observed output, QA, and commit/push references. Do not invent evidence:
+a commit records history, not authorship or correctness.
 
-For every phase, record approval decisions, errors, corrections, exact test
-commands and their observed outputs, and relevant AI conversation references
-when available. Do not invent or summarize test output as if it were observed.
-At the end of an approved phase, review its changes and evidence, then record
-the commit and push references. Commits document history but do not by
-themselves establish authorship or correctness.
+## Approval and decisions — 2026-11-09
 
-### Phase record template
+- Product Owner approved completing the full application checklist and the
+  phase-based plan in this repository.
+- Approved the design's recommendation of at least 10 non-whitespace
+  characters for ticket descriptions. Resolution notes are required to be
+  non-empty, without an additional minimum.
+- Approved the proposed gate definitions in [`gates.md`](gates.md).
+- No approval to claim Product Owner QA or the student's live code defense;
+  those require the actual participants and remain pending until performed.
 
-Copy this template for each new phase:
+## Phase 1 — Flask foundation and persistent database
 
-```text
-## Phase N — [name]
+**Status at approval:** Approved; implementation pending.
 
-Status:
-Approved scope and decisions:
-Implementation summary:
-Errors encountered and corrections:
-Tests (exact commands and observed output):
-Manual QA:
-AI conversation evidence/reference:
-Commit:
-Push:
-Readiness decision:
-```
+**Approved scope:** Flask app factory, on-disk SQLite schema, foreign-key
+enforcement, idempotent fictional technician and sample-ticket seed data,
+start/setup instructions, and focused database tests.
 
-Teacher live verification may ask the student to explain a function, trace a
-request from browser through Flask to SQLite, reproduce an error, or make a
-small change. Record the student's verification notes when performed. A phase
-or application is not ready for teacher review solely because it looks
-complete; implementation must follow the approved workflow and pass code
-defense and tests.
+**Implementation evidence:** To be recorded after implementation.
+**Tests (exact command and observed output):** Pending.
+**Manual QA:** Pending.
 
-## Phase 1 — Foundation and persistent database
+**Commit:** Pending.
+**Push:** Pending.
+**Readiness decision:** Pending test evidence and Product Owner review.
 
-**Status:** Proposed design prepared; implementation not started or verified.
+## Phase 2 — Ticket creation, validation, and dashboard
 
-**Scope for this phase**
+**Status at approval:** Approved; implementation pending.
 
-- Inspect the repository and confirm the Python/Flask project structure.
-- Create a minimal Flask application and document setup/run/test commands.
-- Initialize a persistent, on-disk SQLite database.
-- Define the initial schema for tickets, fictional technicians, and ticket
-  status history, including constraints and foreign keys.
-- Seed a stable fictional technician list without duplicating entries on
-  repeated initialization.
-- Document database location and safe development reset procedure.
+**Approved scope:** Public submission; server validation and generated ticket
+fields; dashboard, ticket details, room search, and combined filters.
 
-**Out of scope:** Ticket form, dashboard, search/filter UI, ticket CRUD API,
-assignment UI, status transition behavior, authentication, and deployment.
+**Implementation evidence:** To be recorded after implementation.
+**Tests (exact command and observed output):** Pending.
+**Manual QA:** Pending.
 
-**Design review**
+**Commit:** Pending.
+**Push:** Pending.
+**Readiness decision:** Pending test evidence and Product Owner review.
 
-- Frontend-to-backend-to-database architecture and proposed schema are recorded
-  in [`design.md`](design.md).
-- Keep SQLite out of static/public assets; enable foreign keys.
-- Use only fictional/sample data and do not commit the database.
-- The description minimum remains a Product Owner decision; recommendation is
-  10 non-whitespace characters. It is not a Phase 1 implementation requirement.
+## Phase 3 — Assignment, status workflow, and integration
 
-**Implementation evidence:** Pending. No code, setup, database initialization,
-or tests have been reviewed for this phase.
+**Status at approval:** Approved; implementation pending.
 
-**Product Owner QA:** Pending.
+**Approved scope:** Persisted fictional technician assignment; allowed status
+transitions; mandatory resolution notes; atomic resolution metadata and status
+history; restart persistence; complete test matrix and gates.
 
-**Readiness decision:** Not ready for teacher review. Reassess after an approved
-implementation, observed test results, and Product Owner QA.
+**Implementation evidence:** To be recorded after implementation.
+**Tests (exact command and observed output):** Pending.
+**Manual QA:** Pending.
 
-**Evidence to attach when implementation is returned**
+**Commit:** Pending.
+**Push:** Pending.
+**Readiness decision at approval:** Not ready for teacher review until
+implementation, automated tests, manual QA, and the student's live code
+defense are completed.
 
-- Changed-file summary and exact setup/run/test commands.
-- Actual test output for database initialization, schema constraints, foreign
-  keys, technician seeding/idempotence, and persistence across app restart.
-- Manual Product Owner check that the documented database path is correct and
-  sample data survives restarting the application.
+## Student live verification
+
+**Status:** Not performed.
+
+The student should explain `create_app`, trace a submission from the form
+through Flask validation into SQLite, explain how the status transaction rolls
+back when history recording fails, reproduce a rejected request, and make a
+small live code change. Record the student's actual demonstration and
+teacher/owner feedback here only after it happens.

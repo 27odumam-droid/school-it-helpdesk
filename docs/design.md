@@ -97,9 +97,8 @@ technician assignment remains unchanged when resolving.
   resolution notes.
 - Accept only the documented category, priority, and status values. Reject
   unsupported values in Flask even if browser controls are bypassed.
-- Require a minimum description length. **Recommendation for Product Owner
-  decision: 10 non-whitespace characters.** Do not silently treat this
-  recommendation as approved; confirm it before implementation.
+- Require a minimum description length of **10 non-whitespace characters**,
+  approved by the Product Owner on 2026-11-09.
 - Generate ticket UUID and timestamps on the server. Reject client attempts to
   supply or override server-owned fields.
 - Validate the ticket ID format before lookup; return a clear not-found
