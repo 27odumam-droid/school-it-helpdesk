@@ -1,70 +1,88 @@
 # School IT Help Desk
 
-A Computer Science II project for reporting and managing school IT support
-requests. Teachers and staff can submit tickets; users can view, search, filter,
-assign, update, and resolve them. This is a classroom prototype and does not
-include login accounts.
+A classroom prototype for submitting and managing fictional school IT support
+requests. It uses Python, Flask, SQLite, HTML, CSS, and JavaScript. No login is
+required; do not use real student or staff data or expose the app to a public
+network.
 
-## Technology
+## Features
 
-- Python and Flask: web server, backend validation, business rules, and API
-- SQLite: persistent ticket and technician data
-- HTML and CSS: interface
-- JavaScript and JSON: browser interactions and API communication
-- Git and GitHub: version control and development history
+- Public ticket submission with server-side validation and server-generated
+  UUID, UTC timestamps, and initial `Open` status.
+- Dashboard with room search and combined category, priority, and status
+  filters; complete ticket details.
+- Fictional technician assignment and the `Open` → `In Progress` → `Resolved`
+  workflow. Resolution requires notes and is saved atomically with status
+  history and a resolution timestamp.
+- Persistent SQLite storage, five fictional technicians, and 15 repeatable
+  fictional sample tickets.
 
-## Architecture
+## Requirements and setup
 
-The browser renders the interface and sends JSON requests to Flask. Flask
-validates every request, applies ticket rules, and is the only component that
-reads or writes SQLite. Flask returns a JSON result or a clear error for the
-interface to display. The SQLite database must be stored on disk and survive
-application restarts.
-
-See [`docs/design.md`](docs/design.md) for the proposed schema, API, validation
-rules, development phases, and acceptance tests.
-
-## Project status
-
-This repository is initialized for development. Application features and
-automated tests have not yet been implemented or verified. See
-[`docs/ai-review-log.md`](docs/ai-review-log.md) for the Phase 1 review status.
-
-## Development and review workflow
-
-- Work in approved, testable phases. Get the phase plan approved before
-  implementation; do not build the whole application in one unapproved pass.
-- At the end of each phase, review the changes and test evidence, update
-  [`docs/ai-review-log.md`](docs/ai-review-log.md), then commit and push that
-  phase's work. A commit is supporting history, not proof of authorship or
-  correctness.
-- Keep the AI development log accurate: capture approval decisions, errors,
-  actual test commands and outputs, and corrections. Preserve relevant AI
-  conversation evidence if requested.
-- Be prepared to explain code, trace a request from browser through Flask to
-  SQLite, reproduce an error, and make a small change during live teacher
-  verification.
-- Teacher review requires the code defense and tests; a finished-looking app
-  does not replace the required workflow.
-
-## Planned local setup
-
-These are planned commands, not yet verified in this repository. Phase 1 must
-add the Flask application and dependency file before the app can be run.
+Install Python 3.10 or later and ensure its executable is available in
+PowerShell (add it to `PATH` or use the Python Launcher). From the repository
+root:
 
 ```powershell
-python --version
-git --version
 python -m venv .venv
-.\.venv\Scripts\python.exe --version
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Once Phase 1 provides the Flask entry point and tests, its implementation
-should document the exact application-start and test commands here.
+If the `python` command opens the Microsoft Store instead of Python, disable
+the Windows Python app execution alias or run the installed `python.exe` by
+its full path for the virtual-environment creation step.
 
-## Data and privacy
+`requirements.txt` contains Flask and pytest. SQLite is included with Python;
+no separate database server is needed.
 
-Use fictional/sample data only. Do not commit the SQLite database or real
-student, staff, or school information. The prototype is unauthenticated and is
-not suitable for deployment on a public network.
+## Run and test
+
+```powershell
+.\.venv\Scripts\python.exe app.py
+```
+
+Open <http://127.0.0.1:5000/>. Flask initializes the database and fictional
+seed data on startup. To run the backend test suite:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q
+```
+
+The test suite uses a temporary SQLite database, not the development database.
+Run Flask locally only; the unauthenticated dashboard and update endpoints
+must not be deployed publicly.
+
+## Database and reset
+
+The default on-disk database is `instance/helpdesk.sqlite3`, outside Flask's
+public static directory and ignored by Git. The app creates its parent
+directory, schema, technicians, and stable sample tickets on startup. Seed
+inserts are idempotent and do not overwrite existing tickets.
+
+To intentionally reset local development data, stop the app, make a backup if
+needed, and remove only `instance/helpdesk.sqlite3` (and its SQLite journal
+files if present). The next start creates a fresh database. Never commit the
+database or store real school data in it.
+
+## Architecture
+
+The browser renders Jinja templates and uses same-origin JSON requests in
+`static/app.js`. `helpdesk/routes.py` validates input and applies workflow
+rules; `helpdesk/db.py` initializes and accesses SQLite. Resolution and status
+history writes share a transaction. See [`docs/design.md`](docs/design.md) for
+the schema, API, and acceptance criteria.
+
+## Project review and classroom gates
+
+- [docs/ai-review-log.md](docs/ai-review-log.md) records approved scope,
+  implementation evidence, review decisions, and commit hashes.
+- [docs/manual-test-matrix.md](docs/manual-test-matrix.md) records observed
+  manual UI checks and their results.
+- [docs/gates.md](docs/gates.md) defines Gates A, B, and C.
+- [docs/code-defense-guide.md](docs/code-defense-guide.md) prepares the
+  student for the required live explanation and coding exercise.
+
+Gate C requires the Product Owner's manual QA and the student's own live code
+defense. An AI implementation cannot claim to have completed that defense.
+Use [docs/phase-1-work-order.md](docs/phase-1-work-order.md) as the approved
+implementation handoff.

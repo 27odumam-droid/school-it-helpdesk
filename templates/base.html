@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}School IT Help Desk{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">School IT Help Desk</a>
+    <nav aria-label="Main navigation">
+      <a href="/">Ticket dashboard</a>
+      <a href="/tickets/new">Submit a ticket</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>Classroom prototype · Use fictional data only · Not for public deployment</footer>
+</body>
+</html>

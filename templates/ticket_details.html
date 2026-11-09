@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Ticket details · School IT Help Desk{% endblock %}
+{% block content %}
+<p><a href="/">&larr; Back to dashboard</a></p>
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">TICKET DETAILS</p>
+    <h1 id="ticket-title">Loading ticket…</h1>
+  </div>
+</section>
+<p id="details-message" class="message" role="status" aria-live="polite"></p>
+<section id="ticket-card" class="panel" hidden>
+  <dl id="ticket-fields" class="details-grid"></dl>
+  <section class="workflow">
+    <h2>Assignment</h2>
+    <form id="assignment-form" class="inline-form">
+      <label for="technician-select">Technician</label>
+      <select id="technician-select" name="technician_id"></select>
+      <button type="submit">Save assignment</button>
+    </form>
+    <h2>Update status</h2>
+    <form id="status-form" class="form-grid">
+      <label>Status
+        <select id="status-select" name="status"></select>
+      </label>
+      <label id="resolution-notes-field" class="full-width" hidden>Resolution notes
+        <textarea name="resolution_notes" rows="4"></textarea>
+        <span class="field-help">Required when resolving.</span>
+      </label>
+      <div class="full-width">
+        <button type="submit">Save status</button>
+      </div>
+    </form>
+  </section>
+</section>
+<script id="ticket-page-data" type="application/json">{{ {"ticket_id": ticket_id}|tojson }}</script>
+{% endblock %}
