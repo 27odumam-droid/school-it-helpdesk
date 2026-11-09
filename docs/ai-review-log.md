@@ -49,7 +49,7 @@ technicians. After the browser-created test ticket, the on-disk database
 contained 16 tickets and 5 technicians.
 
 **Product Owner QA:** Pending.
-**Implementation commit:** Pending.
+**Implementation commit:** `5bdb4b72a690f29920444c1ea658889a9d4edc1e`.
 **Push:** Not pushed; awaiting review.
 **Readiness decision:** Gate B passed; Gate C pending.
 
@@ -80,7 +80,7 @@ returned one matching ticket. More UI results are recorded in
 [`manual-test-matrix.md`](manual-test-matrix.md).
 
 **Product Owner QA:** Pending.
-**Implementation commit:** Pending.
+**Implementation commit:** `5bdb4b72a690f29920444c1ea658889a9d4edc1e`.
 **Push:** Not pushed; awaiting review.
 **Readiness decision:** Gate B passed; Gate C pending.
 
@@ -118,7 +118,7 @@ status, assignment, notes, and timestamp. See
 **Product Owner QA:** Pending; implementation-agent browser results are not
 Product Owner sign-off.
 **Student live defense:** Not performed.
-**Implementation commit:** Pending.
+**Implementation commit:** `5bdb4b72a690f29920444c1ea658889a9d4edc1e`.
 **Push:** Not pushed; awaiting review.
 **Readiness decision:** Gate B passed. Not ready for teacher review until
 Gate C's Product Owner QA and student defense are completed.
