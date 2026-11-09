@@ -13,7 +13,7 @@ Owner's own QA. Do not enter real student or staff data.
 | 4 | Search by a room that appears in sample data. | Matching room tickets appear; unrelated rooms do not. | **Pass:** Room `101` plus Hardware/Low/Open filters returned only the matching ticket. |
 | 5 | Combine room, category, priority, and status filters. | Every visible ticket matches all selected criteria. | **Pass:** Combined query displayed one matching `101` / Hardware / Low / Open ticket. |
 | 6 | Open a ticket and assign a fictional technician. | Assignment appears in details and dashboard after refresh. | **Pass:** Assigned Alex Rivera; after app restart, details and the room-filtered dashboard both showed the assignment. |
-| 7 | Change `Open` to `In Progress`, then refresh. | New status remains saved. | **Pass:** UI saved `In Progress`; the ticket then advanced to `Resolved`, which remained after browser refresh and app restart. |
+| 7 | Change a ticket from `Open` through `In Progress` to `Resolved`; refresh after updates. | Permitted status changes are saved. | **Pass:** UI saved `In Progress`, then `Resolved`; resolved status remained after browser refresh and app restart. |
 | 8 | Attempt to resolve without notes, then add notes and resolve. | First attempt is rejected; second saves notes and a resolution time. | **Pass:** Whitespace-only notes returned “Resolution notes is required.” and left status unchanged; valid notes resolved the ticket and displayed `resolved_at`. |
 | 9 | Refresh after creation/updates and restart Flask. | Saved ticket and changes remain available. | **Pass:** Browser refresh and Flask restart retained resolved status, Alex Rivera assignment, notes, and resolution timestamp. |
 

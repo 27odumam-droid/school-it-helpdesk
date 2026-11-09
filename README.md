@@ -30,7 +30,15 @@ python -m venv .venv
 
 If the `python` command opens the Microsoft Store instead of Python, disable
 the Windows Python app execution alias or run the installed `python.exe` by
-its full path for the virtual-environment creation step.
+its full path for the virtual-environment creation step. For a standard
+per-user Python 3.12 installation, that command is:
+
+```powershell
+& "$env:LOCALAPPDATA\Programs\Python\Python312\python.exe" -m venv .venv
+```
+
+Replace `Python312` with the folder for the installed Python version if it
+differs.
 
 `requirements.txt` contains Flask and pytest. SQLite is included with Python;
 no separate database server is needed.
