@@ -130,6 +130,27 @@ Product Owner sign-off.
 **Readiness decision:** Gate B passed. Not ready for teacher review until
 Gate C's Product Owner QA and student defense are completed.
 
+## Optional feature — ticket status history — 2026-11-10
+
+**Status:** Implemented and verified; Product Owner QA pending.
+
+**Scope:** Display existing ticket status-history records as an ordered
+timeline on the ticket detail page, with a clear empty state. The API validates
+ticket IDs and returns a not-found response for nonexistent tickets; the
+existing status workflow is unchanged.
+
+**Verification:** Added automated coverage for ordered transitions, empty
+history, and malformed/nonexistent IDs. The full command
+`.venv\Scripts\python.exe -m pytest -q` returned `42 passed in 3.41s`.
+Browser checks created ticket
+`0beac375-05ed-49d6-b525-1501bbaa65f1`, verified both status transitions and
+timestamps, and confirmed the empty state on an Open sample ticket. See
+[`test-results.md`](test-results.md) and
+[`manual-test-matrix.md`](manual-test-matrix.md).
+
+**Product Owner QA:** Pending.
+**Student live defense:** Not performed.
+
 ## Student live verification
 
 **Status:** Not performed.

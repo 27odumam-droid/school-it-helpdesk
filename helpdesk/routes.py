@@ -150,6 +150,26 @@ def register_routes(app):
             return _error("Ticket was not found.", 404, "not_found")
         return jsonify({"ticket": _serialize_ticket(row)})
 
+    @app.get("/api/tickets/<ticket_id>/history")
+    def get_ticket_history(ticket_id):
+        if parse_uuid(ticket_id) is None:
+            return _error("Ticket ID must be a valid UUID.", 400, field="ticket_id")
+        connection = get_db()
+        if connection.execute(
+            "SELECT 1 FROM tickets WHERE id = ?", (ticket_id.lower(),)
+        ).fetchone() is None:
+            return _error("Ticket was not found.", 404, "not_found")
+        rows = connection.execute(
+            """
+            SELECT old_status, new_status, changed_at
+            FROM ticket_status_history
+            WHERE ticket_id = ?
+            ORDER BY id
+            """,
+            (ticket_id.lower(),),
+        ).fetchall()
+        return jsonify({"history": [dict(row) for row in rows]})
+
     @app.patch("/api/tickets/<ticket_id>/assignment")
     def update_assignment(ticket_id):
         if parse_uuid(ticket_id) is None:

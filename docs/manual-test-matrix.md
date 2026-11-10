@@ -16,6 +16,7 @@ Owner's own QA. Do not enter real student or staff data.
 | 7 | Change a ticket from `Open` through `In Progress` to `Resolved`; refresh after updates. | Permitted status changes are saved. | **Pass:** UI saved `In Progress`, then `Resolved`; resolved status remained after browser refresh and app restart. |
 | 8 | Attempt to resolve without notes, then add notes and resolve. | First attempt is rejected; second saves notes and a resolution time. | **Pass:** Whitespace-only notes returned “Resolution notes is required.” and left status unchanged; valid notes resolved the ticket and displayed `resolved_at`. |
 | 9 | Refresh after creation/updates and restart Flask. | Saved ticket and changes remain available. | **Pass:** Browser refresh and Flask restart retained resolved status, Alex Rivera assignment, notes, and resolution timestamp. |
+| 10 | Open a ticket with status changes and inspect its history. | Recorded transitions appear in order with timestamps; a ticket without transitions has a clear empty state. | **Pass (2026-11-10):** Created `0beac375-05ed-49d6-b525-1501bbaa65f1`, moved it through `In Progress` to `Resolved`, and saw both transitions with timestamps. An Open sample ticket displayed “No status changes have been recorded for this ticket.” API tests verify empty history data and malformed/nonexistent IDs. |
 
 **Product Owner QA:** Pending. The Product Owner should repeat these checks
 and record their own results before Gate C can pass.

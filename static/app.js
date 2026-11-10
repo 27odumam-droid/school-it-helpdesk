@@ -59,7 +59,7 @@ async function loadDashboard() {
         }
         const statusCell = document.createElement("td");
         const badge = document.createElement("span");
-        badge.className = "status";
+        badge.className = `status status-${ticket.status.toLowerCase().replace(" ", "-")}`;
         badge.textContent = ticket.status;
         statusCell.append(badge);
         row.append(statusCell);
@@ -142,6 +142,13 @@ async function loadTicketDetails() {
   const pageData = JSON.parse($("#ticket-page-data").textContent);
   let ticket;
   let technicians;
+  let history;
+
+  function getNextStatuses() {
+    return ticket.status === "Open"
+      ? ["In Progress"]
+      : ticket.status === "In Progress" ? ["Resolved"] : [];
+  }
 
   function displayTicket() {
     $("#ticket-title").textContent = `Ticket ${ticket.id.slice(0, 8)}`;
@@ -166,6 +173,9 @@ async function loadTicketDetails() {
       term.textContent = label;
       const description = document.createElement("dd");
       description.textContent = value;
+      if (label === "Status") {
+        description.className = `status status-${ticket.status.toLowerCase().replace(" ", "-")}`;
+      }
       group.append(term, description);
       fields.append(group);
     }
@@ -180,25 +190,60 @@ async function loadTicketDetails() {
 
     const statusSelect = $("#status-select");
     statusSelect.replaceChildren();
-    const allowed = ticket.status === "Open"
-      ? ["In Progress"]
-      : ticket.status === "In Progress" ? ["Resolved"] : [];
-    for (const status of allowed) addOption(statusSelect, status);
-    $("#status-form").querySelector("button[type=submit]").disabled = allowed.length === 0;
-    $("#status-form").querySelector("button[type=submit]").textContent =
-      allowed.length ? "Save status" : "No further status changes";
-    $("#resolution-notes-field").hidden = allowed[0] !== "Resolved";
-    $("#resolution-notes-field textarea").required = allowed[0] === "Resolved";
+    const nextStatuses = getNextStatuses();
+    addOption(statusSelect, ticket.status, `${ticket.status} (current)`);
+    for (const status of nextStatuses) addOption(statusSelect, status);
+    statusSelect.disabled = nextStatuses.length === 0;
+    updateStatusForm(nextStatuses);
     $("#ticket-card").hidden = false;
+    displayHistory();
+  }
+
+  function displayHistory() {
+    const events = $("#history-events");
+    events.replaceChildren();
+    if (history.length === 0) {
+      const empty = document.createElement("li");
+      empty.className = "history-empty";
+      empty.textContent = "No status changes have been recorded for this ticket.";
+      events.append(empty);
+      return;
+    }
+
+    for (const event of history) {
+      const item = document.createElement("li");
+      const description = document.createElement("p");
+      description.textContent = `${event.old_status} → ${event.new_status}`;
+      const timestamp = document.createElement("time");
+      timestamp.dateTime = event.changed_at;
+      timestamp.textContent = new Date(event.changed_at).toLocaleString();
+      item.append(description, timestamp);
+      events.append(item);
+    }
+  }
+
+  function updateStatusForm(nextStatuses) {
+    const statusSelect = $("#status-select");
+    const submitButton = $("#status-form").querySelector("button[type=submit]");
+    const canUpdate = nextStatuses.includes(statusSelect.value);
+    const resolving = canUpdate && statusSelect.value === "Resolved";
+    submitButton.disabled = !canUpdate;
+    submitButton.textContent = nextStatuses.length
+      ? "Save status"
+      : "No further status changes";
+    $("#resolution-notes-field").hidden = !resolving;
+    $("#resolution-notes-field textarea").required = resolving;
   }
 
   try {
     const result = await Promise.all([
       requestJson("/api/technicians"),
       requestJson(`/api/tickets/${encodeURIComponent(pageData.ticket_id)}`),
+      requestJson(`/api/tickets/${encodeURIComponent(pageData.ticket_id)}/history`),
     ]);
     technicians = result[0].technicians;
     ticket = result[1].ticket;
+    history = result[2].history;
     displayTicket();
   } catch (error) {
     showMessage(message, error.message, "error");
@@ -221,10 +266,8 @@ async function loadTicketDetails() {
     }
   });
 
-  $("#status-select").addEventListener("change", (event) => {
-    const resolving = event.target.value === "Resolved";
-    $("#resolution-notes-field").hidden = !resolving;
-    $("#resolution-notes-field textarea").required = resolving;
+  $("#status-select").addEventListener("change", () => {
+    updateStatusForm(getNextStatuses());
   });
 
   $("#status-form").addEventListener("submit", async (event) => {
@@ -234,11 +277,17 @@ async function loadTicketDetails() {
     const notes = new FormData(form).get("resolution_notes");
     if (notes) payload.resolution_notes = notes;
     try {
+      const oldStatus = ticket.status;
       const response = await requestJson(`/api/tickets/${encodeURIComponent(ticket.id)}/status`, {
         method: "PATCH",
         body: JSON.stringify(payload),
       });
       ticket = response.ticket;
+      history.push({
+        old_status: oldStatus,
+        new_status: ticket.status,
+        changed_at: ticket.updated_at,
+      });
       displayTicket();
       showMessage(message, "Status saved.", "success");
     } catch (error) {

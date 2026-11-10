@@ -14,6 +14,8 @@ network.
 - Fictional technician assignment and the `Open` → `In Progress` → `Resolved`
   workflow. Resolution requires notes and is saved atomically with status
   history and a resolution timestamp.
+- Ticket details include an ordered timeline of recorded status changes.
+- Ticket details include an ordered timeline of recorded status changes.
 - Persistent SQLite storage, five fictional technicians, and 15 repeatable
   fictional sample tickets.
 
@@ -84,6 +86,8 @@ the schema, API, and acceptance criteria.
 
 - [docs/ai-review-log.md](docs/ai-review-log.md) records approved scope,
   implementation evidence, review decisions, and commit hashes.
+- [docs/test-results.md](docs/test-results.md) records automated test commands,
+  results, and remaining QA boundaries.
 - [docs/manual-test-matrix.md](docs/manual-test-matrix.md) records observed
   manual UI checks and their results.
 - [docs/demo-walkthrough.md](docs/demo-walkthrough.md) walks through creating,

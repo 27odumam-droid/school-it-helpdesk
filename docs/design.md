@@ -128,6 +128,7 @@ All API request and response bodies use JSON except page-serving routes.
 | `GET /api/tickets` | List dashboard fields; optional `room`, `category`, `priority`, `status` query parameters combine as AND filters |
 | `POST /api/tickets` | Validate and create ticket; server sets ID, timestamps, and `Open` status |
 | `GET /api/tickets/<ticket_id>` | Return complete ticket details or a clear ID/not-found error |
+| `GET /api/tickets/<ticket_id>/history` | Return recorded status transitions in chronological order |
 | `PATCH /api/tickets/<ticket_id>/assignment` | Assign a listed technician or clear assignment if supported |
 | `PATCH /api/tickets/<ticket_id>/status` | Apply an allowed transition; resolving requires notes |
 

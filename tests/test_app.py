@@ -106,6 +106,9 @@ def test_new_ticket_has_unique_server_fields_and_trimmed_values(client, valid_ti
     assert one["status"] == "Open"
     assert one["room"] == "Room 9"
     assert one["technician_id"] is None
+    history = client.get(f"/api/tickets/{one['id']}/history")
+    assert history.status_code == 200
+    assert history.get_json()["history"] == []
 
 
 @pytest.mark.parametrize(
@@ -196,6 +199,36 @@ def test_ticket_details_return_complete_ticket(client, create_ticket):
     response = client.get(f"/api/tickets/{created['id']}")
     assert response.status_code == 200
     assert response.get_json()["ticket"]["description"] == created["description"]
+
+
+def test_ticket_history_returns_status_transitions_in_order(client, create_ticket):
+    ticket = create_ticket()
+    client.patch(
+        f"/api/tickets/{ticket['id']}/status", json={"status": "In Progress"}
+    )
+    client.patch(
+        f"/api/tickets/{ticket['id']}/status",
+        json={"status": "Resolved", "resolution_notes": "Replaced the display cable."},
+    )
+
+    response = client.get(f"/api/tickets/{ticket['id']}/history")
+
+    assert response.status_code == 200
+    history = response.get_json()["history"]
+    assert [(event["old_status"], event["new_status"]) for event in history] == [
+        ("Open", "In Progress"),
+        ("In Progress", "Resolved"),
+    ]
+    assert all(event["changed_at"] for event in history)
+
+
+def test_ticket_history_rejects_malformed_and_nonexistent_ids(client):
+    malformed = client.get("/api/tickets/not-a-uuid/history")
+    missing = client.get(f"/api/tickets/{uuid.uuid4()}/history")
+
+    assert malformed.status_code == 400
+    assert malformed.get_json()["error"]["field"] == "ticket_id"
+    assert missing.status_code == 404
 
 
 def test_assignment_persists_and_can_be_cleared(client, create_ticket):

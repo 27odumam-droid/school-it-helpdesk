@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Ticket details · School IT Help Desk{% endblock %}
 {% block content %}
-<p><a href="/">&larr; Back to dashboard</a></p>
+<p class="back-link"><a href="/">&larr; Back to dashboard</a></p>
 <section class="page-heading">
   <div>
     <p class="eyebrow">TICKET DETAILS</p>
@@ -11,6 +11,10 @@
 <p id="details-message" class="message" role="status" aria-live="polite"></p>
 <section id="ticket-card" class="panel" hidden>
   <dl id="ticket-fields" class="details-grid"></dl>
+  <section class="ticket-history" aria-labelledby="history-heading">
+    <h2 id="history-heading">Ticket history</h2>
+    <ol id="history-events" class="history-events"></ol>
+  </section>
   <section class="workflow">
     <h2>Assignment</h2>
     <form id="assignment-form" class="inline-form">
