@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from flask import Flask
@@ -14,7 +15,10 @@ def create_app(test_config=None):
         static_folder="../static",
     )
     app.config.from_mapping(
-        DATABASE=str(Path(app.instance_path) / "helpdesk.sqlite3"),
+        DATABASE=os.environ.get(
+            "HELPDESK_DATABASE",
+            str(Path(app.instance_path) / "helpdesk.sqlite3"),
+        ),
         JSON_SORT_KEYS=False,
     )
     if test_config is not None:

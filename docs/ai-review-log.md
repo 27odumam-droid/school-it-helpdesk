@@ -161,3 +161,36 @@ explain `create_app`, trace a request from browser through Flask to SQLite,
 explain the atomic status/history update and rollback test, reproduce a
 rejected request, and make a small live code change. Record the student's
 actual demonstration and teacher/owner feedback here only after it happens.
+
+## Hosting configuration — Render
+
+**Status:** Render configuration prepared and locally verified; public service
+not created or deployed.
+
+**Approved direction:** Product Owner selected Render with a persistent disk
+for a shareable demo. This app has no login; a deployed URL allows anyone to
+view and change fictional tickets. Do not enter real school information.
+
+**Changes:** Added `render.yaml` for a Python web service using Gunicorn, a
+`/healthz` check, and a 1 GB disk mounted at `/var/data`. Added the
+`HELPDESK_DATABASE` environment override so SQLite is stored at
+`/var/data/helpdesk.sqlite3`. Added coverage for environment-configured
+database initialization and the health endpoint. Updated README with the
+deployment steps, public-access warning, and paid persistent-disk requirement.
+
+**Verification (exact command and observed result):**
+
+```powershell
+Set-Location -LiteralPath 'H:\AI vs AI\school-it-helpdesk'; & '.\.venv\Scripts\python.exe' -m pytest -q
+```
+
+Result: `43 passed in 3.93s`.
+
+Local health request to `http://127.0.0.1:5000/healthz` returned
+`{"status":"ok"}`. This verifies the app's local health route, not a Render
+deployment or persistent-disk behavior on Render.
+
+**Deployment:** Pending. A Render service has not been created because that
+requires the Product Owner to sign in to Render, connect the GitHub repository,
+review the paid service/disk resources, and approve creation. No public app URL
+exists yet.

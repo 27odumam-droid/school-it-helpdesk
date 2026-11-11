@@ -2,8 +2,8 @@
 
 A classroom prototype for submitting and managing fictional school IT support
 requests. It uses Python, Flask, SQLite, HTML, CSS, and JavaScript. No login is
-required; do not use real student or staff data or expose the app to a public
-network.
+required. If deployed to Render, the demo will be publicly accessible, so use
+fictional data only; anyone with the URL can view and change tickets.
 
 ## Features
 
@@ -14,7 +14,6 @@ network.
 - Fictional technician assignment and the `Open` → `In Progress` → `Resolved`
   workflow. Resolution requires notes and is saved atomically with status
   history and a resolution timestamp.
-- Ticket details include an ordered timeline of recorded status changes.
 - Ticket details include an ordered timeline of recorded status changes.
 - Persistent SQLite storage, five fictional technicians, and 15 repeatable
   fictional sample tickets.
@@ -59,8 +58,8 @@ seed data on startup. To run the backend test suite:
 ```
 
 The test suite uses a temporary SQLite database, not the development database.
-Run Flask locally only; the unauthenticated dashboard and update endpoints
-must not be deployed publicly.
+For local development, the unauthenticated dashboard and update endpoints are
+intended for trusted classroom use with fictional data only.
 
 ## Database and reset
 
@@ -68,6 +67,10 @@ The default on-disk database is `instance/helpdesk.sqlite3`, outside Flask's
 public static directory and ignored by Git. The app creates its parent
 directory, schema, technicians, and stable sample tickets on startup. Seed
 inserts are idempotent and do not overwrite existing tickets.
+
+The database path can be overridden with the `HELPDESK_DATABASE` environment
+variable. Render sets it to `/var/data/helpdesk.sqlite3`, beneath the attached
+persistent disk, so the data survives deploys and service restarts.
 
 To intentionally reset local development data, stop the app, make a backup if
 needed, and remove only `instance/helpdesk.sqlite3` (and its SQLite journal
@@ -100,3 +103,20 @@ Gate C requires the Product Owner's manual QA and the student's own live code
 defense. An AI implementation cannot claim to have completed that defense.
 Use [docs/phase-1-work-order.md](docs/phase-1-work-order.md) as the approved
 implementation handoff.
+
+## Render deployment
+
+The root [`render.yaml`](render.yaml) defines a Render Blueprint web service
+using Gunicorn and a 1 GB persistent disk for SQLite. Render requires a paid
+web-service plan for persistent disks; review the current plan and disk charges
+in Render before creating the service.
+
+To deploy, sign in at [Render](https://dashboard.render.com), create a new
+Blueprint instance, connect the
+[school-it-helpdesk GitHub repository](https://github.com/27odumam-droid/school-it-helpdesk),
+and approve the resources shown in `render.yaml`. After the first deploy
+succeeds, Render provides the public `onrender.com` application URL. Verify
+`/healthz`, create a fictional test ticket, and confirm it remains after a
+service restart before relying on the demo. This setup does not add
+authentication: anyone with the public URL can create, assign, and change
+tickets. Do not enter real school information.

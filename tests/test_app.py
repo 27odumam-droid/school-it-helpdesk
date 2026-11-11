@@ -1,6 +1,7 @@
 import sqlite3
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 
@@ -11,9 +12,22 @@ from helpdesk.db import SAMPLE_TICKET_COUNT, TECHNICIANS, get_db
 def test_pages_and_health_of_seed_data(client):
     assert client.get("/").status_code == 200
     assert client.get("/tickets/new").status_code == 200
+    health = client.get("/healthz")
+    assert health.status_code == 200
+    assert health.get_json() == {"status": "ok"}
     tickets = client.get("/api/tickets").get_json()["tickets"]
     assert len(tickets) >= SAMPLE_TICKET_COUNT
     assert client.get("/api/technicians").status_code == 200
+
+
+def test_database_path_can_be_configured_from_environment(tmp_path, monkeypatch):
+    database_path = tmp_path / "persistent" / "helpdesk.sqlite3"
+    monkeypatch.setenv("HELPDESK_DATABASE", str(database_path))
+
+    app = create_app({"TESTING": True})
+
+    assert Path(app.config["DATABASE"]) == database_path
+    assert database_path.exists()
 
 
 def test_seeded_fictional_ticket_details_are_accessible(client):

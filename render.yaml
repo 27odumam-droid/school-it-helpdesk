@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: school-it-helpdesk
+    runtime: python
+    plan: starter
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: HELPDESK_DATABASE
+        value: /var/data/helpdesk.sqlite3
+    disk:
+      name: school-it-helpdesk-data
+      mountPath: /var/data
+      sizeGB: 1

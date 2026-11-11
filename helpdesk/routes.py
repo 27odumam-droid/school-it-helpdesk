@@ -63,6 +63,11 @@ def register_routes(app):
         logger.exception("Help desk database operation failed")
         return _error("The database operation failed. No changes were saved.", 500, "database_error")
 
+    @app.get("/healthz")
+    def health_check():
+        get_db().execute("SELECT 1").fetchone()
+        return jsonify({"status": "ok"})
+
     @app.get("/")
     def dashboard():
         return render_template("dashboard.html")
