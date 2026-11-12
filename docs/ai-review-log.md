@@ -194,3 +194,44 @@ deployment or persistent-disk behavior on Render.
 requires the Product Owner to sign in to Render, connect the GitHub repository,
 review the paid service/disk resources, and approve creation. No public app URL
 exists yet.
+
+## Verification reliability follow-up — 2026-11-12
+
+**Status:** Implemented and verified; Product Owner QA and student live
+defense remain pending.
+
+**Pytest configuration fix:** Added repository-local `pytest.ini` with
+`testpaths = tests` and `addopts = --confcutdir=tests` so test and
+`conftest.py` discovery do not depend on parent workspace files. Updated the
+README to pass `-c pytest.ini` explicitly.
+
+**Exact test command (from the repository root):**
+
+```powershell
+Set-Location -LiteralPath 'H:\AI vs AI\school-it-helpdesk'; & '.\.venv\Scripts\python.exe' -m pytest -c pytest.ini -q
+```
+
+**Exact output:**
+
+```text
+...........................................                              [100%]
+43 passed in 4.89s
+```
+
+**Live server restart persistence check:** Set `HELPDESK_DATABASE` to
+`%TEMP%\helpdesk-restart-verification.sqlite3` and started Flask with
+`.venv\Scripts\python.exe -m flask --app helpdesk:create_app run
+--no-debugger --no-reload --host 127.0.0.1 --port 5128`. In the browser,
+created ticket `c5cf5b99-c217-47f6-ba47-a3ceb4bb6680`, assigned Jamie Chen,
+moved it from `Open` to `In Progress` to `Resolved`, and saved resolution
+notes. Stopped the Flask server, started it again with the same
+`HELPDESK_DATABASE` path, and reloaded the details page.
+
+**Observed result:** PASS. The same ticket remained available with Jamie Chen
+assigned, `Resolved` status, resolution notes, resolved timestamp
+`2026-11-12T19:05:02Z` (shown in the browser as 1:05:02 PM local time), and
+both `Open` -> `In Progress` and `In Progress` -> `Resolved` history entries.
+The browser reported no JavaScript page errors.
+
+**Product Owner QA:** Pending.
+**Student live defense:** Not performed.

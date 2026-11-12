@@ -54,7 +54,7 @@ Open <http://127.0.0.1:5000/>. Flask initializes the database and fictional
 seed data on startup. To run the backend test suite:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m pytest -c pytest.ini -q
 ```
 
 The test suite uses a temporary SQLite database, not the development database.
